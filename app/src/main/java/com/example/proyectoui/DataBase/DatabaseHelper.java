@@ -75,6 +75,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updatePension(int id ,  String titulo , String desc, byte[] img , String ubicacion , String telefono ){
-        
+        SQLiteDatabase BD = getWritableDatabase();
+        if (BD!=null){
+            BD.execSQL("UPDATE PENSION SET titulo='"+titulo+"',description='"+desc+"',ubicacion='"+ubicacion+"',imagen='"+img+"',telefono='"+telefono+"' WHERE _id='"+id+"'");
+            BD.close();
+        }
     }
 }
