@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Reserv-U</string>
+    <string name="HomeTag">Inicio</string>
+    <string name="NotificationTag">Notificaciones</string>
+    <string name="Acounttag">Cuenta</string>
+    <string name="bienvenida_usuario">Iniciar sesion</string>
+    <string name="boton_ingresar">Ingresar</string>
+    <string name="boton_guardar">Guardar</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="prompt_email">Correo electronico</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Registrarse</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Registro exitoso"</string>
+    <string name="ButRegistrar">Registrate</string>
+    <string name="checkBox1">U.COSTA</string>
+    <string name="checkBox2">U.AUTONOMA</string>
+    <string name="checkBox3">U.NORTE</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="BotttonPost">Publicar</string>
+    <string name="SharePost">Publicar Nueva Oferta</string>
+    <string name="PostTitle">Titulo De La Publicacion</string>
+    <string name="HolderTitle">Ingresa el Nombre de la Publicacion</string>
+    <string name="TxtDescription">Descripcion De La Pension</string>
+    <string name="SessionStart">Inicia Sesion</string>
+    <string name="NoNotification">No Hay Notificaciones</string>
+    <string name="deletePost">Eliminar</string>
+    <string name="editPost">Editar</string>
+    <string name="title_activity_update_post">updatePost</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="updatePoststring">Actualizar</string>
+</resources>
