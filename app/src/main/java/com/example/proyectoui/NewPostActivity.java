@@ -41,7 +41,7 @@ public class NewPostActivity extends AppCompatActivity {
     Button BtnAdd;
     private ImageButton btntomarfoto,btnsubirfoto;
     private ImageView img;
-    byte[] ByteImg;
+   // byte[] ByteImg;
 
 
     Uri imagenUri;
@@ -91,10 +91,16 @@ public class NewPostActivity extends AppCompatActivity {
         BtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BD.AgregarPension(title.getText().toString(),desc.getText().toString(),ByteImg,"Malambo","3045933566");
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-                Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
+                byte[] BYTE = getImgByte();
+                if (BYTE == null){
+                    Toast.makeText(NewPostActivity.this, "Byte de imagen Nula", Toast.LENGTH_SHORT).show();
+                }else{
+                    BD.AgregarPension(title.getText().toString(),desc.getText().toString(),BYTE,"Malambo","3045933566");
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -149,20 +155,17 @@ public class NewPostActivity extends AppCompatActivity {
             });
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             img.setImageBitmap(bitmap);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0 , byteArrayOutputStream);
-            ByteImg = byteArrayOutputStream.toByteArray();
+
         }
     }
-/*
+
     public byte[] getImgByte() {
         img.setDrawingCacheEnabled(true);
         img.buildDrawingCache();
         Bitmap bmap = img.getDrawingCache();
-
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bmap.compress(Bitmap.CompressFormat.PNG, 100 , byteArrayOutputStream);
         byte[] ByteImg = byteArrayOutputStream.toByteArray();
         return ByteImg;
-    }*/
+    }
 }

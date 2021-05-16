@@ -11,9 +11,9 @@ public class HousesList implements Serializable {
     private String Description;
     private String Ubicacion;
     private String Telefono;
-    private byte[] imgResource;
+    private Bitmap imgResource;
 
-    public HousesList(int id,String Title, String Description,String Ubicacion, byte[] imgResource,String Telefono){
+    public HousesList(int id,String Title, String Description,String Ubicacion, Bitmap imgResource,String Telefono){
         this.id = id;
         this.Title = Title;
         this.Description = Description;
@@ -32,7 +32,7 @@ public class HousesList implements Serializable {
         return Description;
     }
 
-    public byte[] getImgResource() {
+    public Bitmap getImgResource() {
         return imgResource;
     }
 

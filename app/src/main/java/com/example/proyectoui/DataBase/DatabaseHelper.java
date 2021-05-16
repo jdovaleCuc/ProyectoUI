@@ -4,11 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.Nullable;
 
 import com.example.proyectoui.modelo.HousesList;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TIT + " TEXT NOT NULL, " + DESC + " TEXT, "+
-            UBI + "TEXT , " + IMG + " BLOB NOT NULL, " + TEL + " TEXT);";
+            UBI + " TEXT , " + IMG + " BLOB , " + TEL + " TEXT);";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -49,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void AgregarPension( String titulo , String desc, byte[] img , String ubicacion , String telefono){
         SQLiteDatabase BD = getWritableDatabase();
         if (BD!=null){
-            BD.execSQL("INSERT INTO PENSION VALUES('"+04+"','"+titulo+"','"+desc+"','"+ubicacion+"','"+img+"','"+telefono+"')");
+            BD.execSQL("INSERT INTO PENSION(titulo, description, ubicacionTEXT, imagen, telefono) VALUES('"+titulo+"','"+desc+"','"+ubicacion+"','"+img+"','"+telefono+"')");
             BD.close();
         }
     }
@@ -58,9 +61,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase BD = getWritableDatabase();
         Cursor cursor = BD.rawQuery("SELECT * FROM PENSION",null);
         List<HousesList> Pensiones = new ArrayList<>();
+        Bitmap bt = null;
         if (cursor.moveToFirst()){
             do {
-                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getBlob(4),cursor.getString(5)));
+                byte[] img = cursor.getBlob(4);
+                bt = BitmapFactory.decodeByteArray(img,0,img.length);
+                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),bt,cursor.getString(5)));
             }while (cursor.moveToNext());
         }
         return Pensiones;
@@ -74,10 +80,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updatePension(int id ,  String titulo , String desc, byte[] img , String ubicacion , String telefono ){
+    public void updatePension(int id ,  String titulo , String desc, Bitmap img , String ubicacion , String telefono ){
         SQLiteDatabase BD = getWritableDatabase();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.PNG, 100 , byteArrayOutputStream);
+        byte[] ByteImg = byteArrayOutputStream.toByteArray();
         if (BD!=null){
-            BD.execSQL("UPDATE PENSION SET titulo='"+titulo+"',description='"+desc+"',ubicacion='"+ubicacion+"',imagen='"+img+"',telefono='"+telefono+"' WHERE _id='"+id+"'");
+            BD.execSQL("UPDATE PENSION SET titulo='"+titulo+"',description='"+desc+"',ubicacionTEXT='"+ubicacion+"',imagen='"+ByteImg+"',telefono='"+telefono+"' WHERE _id='"+id+"'");
             BD.close();
         }
     }

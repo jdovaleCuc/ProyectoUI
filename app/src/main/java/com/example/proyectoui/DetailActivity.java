@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,17 +65,37 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.delete){
-            final DatabaseHelper BD = new DatabaseHelper(this);
-            BD.DeletePension(houseDetail.getId());
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(this, "Se ha eliminado la publicacion", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Eliminar Publicacion");
+            builder.setMessage("¿Quieres eliminar esta publicacion?");
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    deletePost();
+                }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }else if(id == R.id.update){
             Intent update = new Intent(this, updatepost.class);
             update.putExtra("house_update", houseDetail);
             startActivity(update);
         }
         return true;
+    }
+
+    public void deletePost(){
+        final DatabaseHelper BD = new DatabaseHelper(this);
+        BD.DeletePension(houseDetail.getId());
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "Se ha eliminado la publicacion", Toast.LENGTH_SHORT).show();
     }
 
     @Override
