@@ -17,7 +17,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_NAME = "PENSION";
+    public static final String TABLE_PENSION = "PENSION";
 
     public static final String _ID = "_id";
     public static final String TIT = "titulo";
@@ -26,13 +26,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String IMG = "imagen";
     public static final String TEL = "telefono";
 
+    public static final String TABLE_USER = "USER";
+
+    public static final String _ID_USER = "_id_user";
+    private static final String USERNAME = "username";
+    private static final String LASTNAME = "lastname";
+    private static final String UNIVERSIDAD = "universidad";
+    private static final String EMAIL = "useremail";
+
     static final String DB_NAME = "RESERVU.DB";
 
-    static final int DB_VERSION = 2;
+    static final int DB_VERSION = 1;
 
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
+    private static final String CREATE_TABLE_PENSION = "create table " + TABLE_PENSION + "(" + _ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TIT + " TEXT NOT NULL, " + DESC + " TEXT, "+
-            UBI + " TEXT , " + IMG + " BLOB , " + TEL + " TEXT);";
+            UBI + " TEXT , " + IMG + " BLOB , " + TEL + " TEXT, " + EMAIL + " TEXT, FOREIGN KEY("+EMAIL+") REFERENCES "+TABLE_USER+"("+EMAIL+"));";
+
+    private static final String CREATE_TABLE_USER = "create table " + TABLE_USER + "(" + _ID_USER
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + USERNAME + " TEXT NOT NULL, " + LASTNAME + " TEXT, "+
+            UNIVERSIDAD + " TEXT , " + EMAIL + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -40,19 +52,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(CREATE_TABLE);
+        sqLiteDatabase.execSQL(CREATE_TABLE_PENSION);
+        sqLiteDatabase.execSQL(CREATE_TABLE_USER);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_PENSION);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_USER);
         onCreate(sqLiteDatabase);
     }
 
-    public void AgregarPension( String titulo , String desc, byte[] img , String ubicacion , String telefono){
+    public void AgregarUser( String name , String lastname, String uni , String Email){
         SQLiteDatabase BD = getWritableDatabase();
         if (BD!=null){
-            BD.execSQL("INSERT INTO PENSION(titulo, description, ubicacionTEXT, imagen, telefono) VALUES('"+titulo+"','"+desc+"','"+ubicacion+"','"+img+"','"+telefono+"')");
+            BD.execSQL("INSERT INTO USER(username, lastname, universidad, useremail) VALUES('"+name+"','"+lastname+"','"+uni+"','"+Email+"')");
+            BD.close();
+        }
+    }
+
+    public void AgregarPension( String titulo , String desc, byte[] img , String ubicacion , String telefono, String idUser){
+        SQLiteDatabase BD = getWritableDatabase();
+        if (BD!=null){
+            BD.execSQL("INSERT INTO PENSION(titulo, description, ubicacion, imagen, telefono, useremail) VALUES('"+titulo+"','"+desc+"','"+ubicacion+"','"+img+"','"+telefono+"','"+idUser+"')");
             BD.close();
         }
     }
@@ -66,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 byte[] img = cursor.getBlob(4);
                 bt = BitmapFactory.decodeByteArray(img,0,img.length);
-                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),bt,cursor.getString(5)));
+                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(6),cursor.getString(1),cursor.getString(2),cursor.getString(3),bt,cursor.getString(5)));
             }while (cursor.moveToNext());
         }
         return Pensiones;

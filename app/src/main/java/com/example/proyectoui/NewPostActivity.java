@@ -8,11 +8,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -27,12 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectoui.DataBase.DatabaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
@@ -41,6 +38,7 @@ public class NewPostActivity extends AppCompatActivity {
     Button BtnAdd;
     private ImageButton btntomarfoto,btnsubirfoto;
     private ImageView img;
+    private FirebaseAuth mAuth;
    // byte[] ByteImg;
 
 
@@ -59,6 +57,8 @@ public class NewPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+
+        mAuth = FirebaseAuth.getInstance();
         img = findViewById(R.id.ImagenPost);
         btnsubirfoto = findViewById(R.id.UpPhoto);
         btntomarfoto = findViewById(R.id.CatchPhoto);
@@ -81,7 +81,7 @@ public class NewPostActivity extends AppCompatActivity {
             }
         });
 
-        title = findViewById(R.id.NewPostTitle);
+        title = findViewById(R.id.nameuser);
         desc = findViewById(R.id.NewPostDesc);
         //img = findViewById(R.id.NewPostImg);
         BtnAdd = findViewById(R.id.AddPost);
@@ -95,7 +95,8 @@ public class NewPostActivity extends AppCompatActivity {
                 if (BYTE == null){
                     Toast.makeText(NewPostActivity.this, "Byte de imagen Nula", Toast.LENGTH_SHORT).show();
                 }else{
-                    BD.AgregarPension(title.getText().toString(),desc.getText().toString(),BYTE,"Malambo","3045933566");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    BD.AgregarPension(title.getText().toString(),desc.getText().toString(),BYTE,"Malambo","3045933566", user.getEmail());
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                     Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();

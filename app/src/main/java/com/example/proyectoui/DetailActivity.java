@@ -43,7 +43,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseAuth mAuth;
-    private ImageView imgDetail;
+    private ImageView imgDetail, imgPhone, imgEmail;
     private TextView TitleDetail;
     private TextView DescriptionDetail;
     private HousesList houseDetail;
@@ -61,6 +61,19 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mapView = findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        imgPhone = findViewById(R.id.phoneView);
+        imgEmail = findViewById(R.id.EmailView);
+        imgPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowInfo(houseDetail.getTitle(),"Telefono de Contacto: "+houseDetail.getTelefono()); }
+        });
+        imgEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowInfo(houseDetail.getTitle(),"Email de Contacto: "+houseDetail.getIdUser());
+            }
+        });
         initViews();
         initValues();
     }
@@ -69,7 +82,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public boolean onCreateOptionsMenu(Menu menu) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null){
-            getMenuInflater().inflate(R.menu.detail_icon_menu, menu);
+            if (houseDetail.getIdUser() == user.getEmail()){
+                getMenuInflater().inflate(R.menu.detail_icon_menu, menu);
+            }else{
+
+            }
+
         }
         return true;
     }
@@ -101,6 +119,18 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             startActivity(update);
         }
         return true;
+    }
+
+    private void ShowInfo(String Referent ,String topic){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(Referent);
+        builder.setMessage(topic);
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) { dialogInterface.cancel();; }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void deletePost() {

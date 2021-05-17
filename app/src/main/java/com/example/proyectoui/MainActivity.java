@@ -61,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setSelectedItemId(R.id.inicio);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void SetFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);

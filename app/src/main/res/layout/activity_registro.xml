@@ -78,7 +78,7 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <EditText
-        android:id="@+id/NewPostTitle"
+        android:id="@+id/nameuser"
         android:layout_width="326dp"
         android:layout_height="39dp"
         android:layout_marginStart="24dp"
@@ -93,7 +93,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/NewPostImg"
+        android:id="@+id/lastname"
         android:layout_width="325dp"
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
@@ -105,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.421"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NewPostTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/nameuser" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -116,7 +116,7 @@
         android:fontFamily="sans-serif-light"
         android:text="@string/checkBox1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NewPostImg" />
+        app:layout_constraintTop_toBottomOf="@+id/lastname" />
 
     <CheckBox
         android:id="@+id/checkBox2"
@@ -128,7 +128,7 @@
         android:fontFamily="sans-serif-light"
         android:text="@string/checkBox2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NewPostImg" />
+        app:layout_constraintTop_toBottomOf="@+id/lastname" />
 
     <CheckBox
         android:id="@+id/checkBox3"
@@ -142,5 +142,5 @@
         android:text="@string/checkBox3"
         app:layout_constraintEnd_toStartOf="@+id/checkBox2"
         app:layout_constraintStart_toEndOf="@+id/checkBox1"
-        app:layout_constraintTop_toBottomOf="@+id/NewPostImg" />
+        app:layout_constraintTop_toBottomOf="@+id/lastname" />
 </androidx.constraintlayout.widget.ConstraintLayout>
