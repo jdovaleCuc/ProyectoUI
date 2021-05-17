@@ -36,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         HousesList house = houses.get(position);
-        holder.imgItem.setImageBitmap(house.getImgResource());
+        //holder.imgItem.setImageBitmap(house.getImgResource());
         holder.HouseTitle.setText(house.getTitle());
         holder.HouseDescription.setText(house.getDescription());
 

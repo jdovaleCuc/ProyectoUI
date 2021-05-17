@@ -160,12 +160,14 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     public byte[] getImgByte() {
-        img.setDrawingCacheEnabled(true);
-        img.buildDrawingCache();
-        Bitmap bmap = img.getDrawingCache();
+
+        //img.setDrawingCacheEnabled(true);
+        //img.buildDrawingCache();
+        Bitmap bmap = ((BitmapDrawable)img.getDrawable()).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bmap.compress(Bitmap.CompressFormat.PNG, 100 , byteArrayOutputStream);
         byte[] ByteImg = byteArrayOutputStream.toByteArray();
         return ByteImg;
+
     }
 }
