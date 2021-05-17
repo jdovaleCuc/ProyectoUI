@@ -36,6 +36,7 @@
 
                 <TextView
 
+                    android:id="@+id/Title_Card_Session"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Inicia Sesion"
@@ -45,6 +46,7 @@
 
                 <TextView
 
+                    android:id="@+id/User_Text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Usuario Desconocido"
@@ -53,9 +55,15 @@
 
                 <Button
                     android:id="@+id/BottonLanzar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="164dp"
                     android:layout_height="wrap_content"
                     android:text="Iniciar Sesion" />
+
+                <ImageButton
+                    android:id="@+id/SignOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_baseline_login_24" />
 
             </LinearLayout>
         </LinearLayout>

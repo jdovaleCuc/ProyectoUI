@@ -1,5 +1,6 @@
 package com.example.proyectoui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,9 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AccountFragment extends Fragment {
 
+    private FirebaseAuth mAuth;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,6 +54,7 @@ public class AccountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -58,11 +67,32 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         Button btnLanzarActivity = (Button) view.findViewById(R.id.BottonLanzar);
+        TextView title = view.findViewById(R.id.Title_Card_Session);
+        TextView userv =  view.findViewById(R.id.User_Text);
+        ImageButton Out = view.findViewById(R.id.SignOut);
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null){
+            btnLanzarActivity.setVisibility(btnLanzarActivity.INVISIBLE);
+            title.setText("Bienvenido");
+            userv.setText(user.getEmail());
+
+        }else {
+            Out.setVisibility(Out.INVISIBLE);
+        }
         btnLanzarActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),LoginActivity.class);
                 startActivity(intent);
+            }
+        });
+        Out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(),MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(getContext(), "Sesion Cerrada", Toast.LENGTH_SHORT).show();
             }
         });
         return view;
