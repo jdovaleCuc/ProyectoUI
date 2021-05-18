@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_anchorGravity="center"
+    android:orientation="vertical"
     tools:context=".FragmentNotification">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerNotificaction"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|center_horizontal|center_vertical"
-        android:text="@string/NoNotification"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

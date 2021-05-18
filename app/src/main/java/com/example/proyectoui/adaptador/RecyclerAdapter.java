@@ -36,7 +36,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         HousesList house = houses.get(position);
-        //holder.imgItem.setImageBitmap(house.getImgResource());
+        byte[] img = house.getImgResource() ;
+        Bitmap bt = BitmapFactory.decodeByteArray(img,0,img.length);
+        holder.imgItem.setImageBitmap(bt);
         holder.HouseTitle.setText(house.getTitle());
         holder.HouseDescription.setText(house.getDescription());
 
@@ -63,8 +65,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
          public RecyclerHolder(@NonNull View itemView){
              super(itemView);
              imgItem = itemView.findViewById(R.id.imgitem);
-             HouseTitle = itemView.findViewById(R.id.HouseTitle);
-             HouseDescription = itemView.findViewById(R.id.HouseDescription);
+             HouseTitle = itemView.findViewById(R.id.NotTopic);
+             HouseDescription = itemView.findViewById(R.id.NotDesc);
          }
     }
 }

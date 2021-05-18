@@ -97,6 +97,7 @@ public class NewPostActivity extends AppCompatActivity {
                 }else{
                     FirebaseUser user = mAuth.getCurrentUser();
                     BD.AgregarPension(title.getText().toString(),desc.getText().toString(),BYTE,"Malambo","3045933566", user.getEmail());
+                    BD.AgregarNotify("Ha Realizado una nueva Publicacion", title.getText().toString(), user.getEmail());
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                     Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
@@ -162,9 +163,9 @@ public class NewPostActivity extends AppCompatActivity {
 
     public byte[] getImgByte() {
 
-        //img.setDrawingCacheEnabled(true);
-        //img.buildDrawingCache();
-        Bitmap bmap = ((BitmapDrawable)img.getDrawable()).getBitmap();
+        img.setDrawingCacheEnabled(true);
+        img.buildDrawingCache();
+        Bitmap bmap = img.getDrawingCache();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bmap.compress(Bitmap.CompressFormat.PNG, 100 , byteArrayOutputStream);
         byte[] ByteImg = byteArrayOutputStream.toByteArray();

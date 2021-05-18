@@ -31,7 +31,7 @@ public class updatepost extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BD.updatePension(houseDetail.getId(),title.getText().toString(),desc.getText().toString(),houseDetail.getImgResource(),houseDetail.getUbicacion(),houseDetail.getTelefono());
+                //BD.updatePension(houseDetail.getId(),title.getText().toString(),desc.getText().toString(),houseDetail.getImgResource(),houseDetail.getUbicacion(),houseDetail.getTelefono());
             }
         });
     }

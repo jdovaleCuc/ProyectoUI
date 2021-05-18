@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.location.Location;
@@ -82,12 +84,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public boolean onCreateOptionsMenu(Menu menu) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null){
-            if (houseDetail.getIdUser() == user.getEmail()){
-                getMenuInflater().inflate(R.menu.detail_icon_menu, menu);
-            }else{
-
-            }
-
+            getMenuInflater().inflate(R.menu.detail_icon_menu, menu);
         }
         return true;
     }
@@ -190,12 +187,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void initValues(){
         houseDetail = (HousesList) getIntent().getExtras().getSerializable("HouseDetail");
-
-        //imgDetail.setImageResource(houseDetail.getImgResource());
+        byte[] img = houseDetail.getImgResource() ;
+        Bitmap bt = BitmapFactory.decodeByteArray(img,0,img.length);
+        imgDetail.setImageBitmap(bt);
         TitleDetail.setText(houseDetail.getTitle());
         DescriptionDetail.setText(houseDetail.getDescription());
     }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

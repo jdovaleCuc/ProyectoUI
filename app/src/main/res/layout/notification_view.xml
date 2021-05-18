@@ -16,11 +16,11 @@
 
         <ImageView
             android:id="@+id/imgitem"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/casa1" />
+            app:srcCompat="@drawable/ic_baseline_circle_notifications_24" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,12 +32,29 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
+
             <TextView
                 android:id="@+id/NotDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/deleteNot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#FFFFFF"
+                    android:tint="@color/colorPr"
+                    app:srcCompat="@drawable/ic_baseline_delete_24" />
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

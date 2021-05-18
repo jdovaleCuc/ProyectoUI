@@ -1,5 +1,6 @@
 package com.example.proyectoui.DataBase;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.Nullable;
 
 import com.example.proyectoui.modelo.HousesList;
+import com.example.proyectoui.modelo.Notification;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -34,6 +36,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String UNIVERSIDAD = "universidad";
     private static final String EMAIL = "useremail";
 
+    public static final String TABLE_NOTIFY = "NOTIFICATIONS";
+
+    public static final String _ID_NOTIFY = "_id_notification";
+    public static final String TOPIC = "topic";
+    public static final String DESC_NOT = "description";
+    public static final String USEREMAIL = "userEmail";
+
     static final String DB_NAME = "RESERVU.DB";
 
     static final int DB_VERSION = 1;
@@ -46,6 +55,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + USERNAME + " TEXT NOT NULL, " + LASTNAME + " TEXT, "+
             UNIVERSIDAD + " TEXT , " + EMAIL + " TEXT NOT NULL);";
 
+    private static final String CREATE_TABLE_NOTIFY = "create table " + TABLE_NOTIFY + "(" + _ID_NOTIFY
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TOPIC + " TEXT NOT NULL, " + DESC_NOT + " TEXT, "+
+            USEREMAIL + " TEXT ,  FOREIGN KEY("+USEREMAIL+") REFERENCES "+TABLE_USER+"("+EMAIL+"));";
+
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -54,12 +67,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE_PENSION);
         sqLiteDatabase.execSQL(CREATE_TABLE_USER);
+        sqLiteDatabase.execSQL(CREATE_TABLE_NOTIFY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_PENSION);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_USER);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_NOTIFY);
         onCreate(sqLiteDatabase);
     }
 
@@ -71,10 +86,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void AgregarPension( String titulo , String desc, byte[] img , String ubicacion , String telefono, String idUser){
+    public void AgregarNotify(String topic, String description, String useremail){
         SQLiteDatabase BD = getWritableDatabase();
         if (BD!=null){
-            BD.execSQL("INSERT INTO PENSION(titulo, description, ubicacion, imagen, telefono, useremail) VALUES('"+titulo+"','"+desc+"','"+ubicacion+"','"+img+"','"+telefono+"','"+idUser+"')");
+            BD.execSQL("INSERT INTO NOTIFICATIONS(topic, description, userEmail) VALUES('"+topic+"','"+description+"','"+useremail+"')");
+            BD.close();
+        }
+    }
+
+
+    public void AgregarPension( String titulo , String desc, byte[] img , String ubicacion , String telefono, String idUser){
+        SQLiteDatabase BD = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        if (BD!=null){
+            contentValues.put("titulo",titulo);
+            contentValues.put("description",desc);
+            contentValues.put("ubicacion",ubicacion);
+            contentValues.put("imagen",img);
+            contentValues.put(" telefono",telefono);
+            contentValues.put("useremail",idUser);
+            BD.insert( "PENSION",null,contentValues);
             BD.close();
         }
     }
@@ -86,12 +117,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Bitmap bt = null;
         if (cursor.moveToFirst()){
             do {
-                byte[] img = cursor.getBlob(4);
-                bt = BitmapFactory.decodeByteArray(img,0,img.length);
-                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(6),cursor.getString(1),cursor.getString(2),cursor.getString(3),bt,cursor.getString(5)));
+                Pensiones.add(new HousesList(cursor.getInt(0),cursor.getString(6),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getBlob(4),cursor.getString(5)));
             }while (cursor.moveToNext());
         }
         return Pensiones;
+    }
+
+    public List<Notification> ShowNotification(String userEmail){
+        SQLiteDatabase BD = getWritableDatabase();
+        Cursor cursor = BD.rawQuery("SELECT * FROM NOTIFICATIONS WHERE userEmail='"+userEmail+"'",null);
+        List<Notification> notifications = new ArrayList<>();
+        if (cursor.moveToFirst()){
+            do {
+                notifications.add(new Notification(cursor.getInt(0),cursor.getString(3),cursor.getString(1),cursor.getString(2)));
+            }while (cursor.moveToNext());
+        }
+        return notifications;
     }
 
     public void DeletePension( int id){
