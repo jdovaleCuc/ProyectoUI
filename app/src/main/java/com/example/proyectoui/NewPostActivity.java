@@ -100,6 +100,7 @@ public class NewPostActivity extends AppCompatActivity {
                     BD.AgregarNotify("Ha Realizado una nueva Publicacion", title.getText().toString(), user.getEmail());
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
+                    finish();
                     Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
                 }
 

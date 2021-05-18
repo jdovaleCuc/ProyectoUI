@@ -42,6 +42,20 @@ public class FragmentNotification extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        rvNotify.setLayoutManager(manager);
+        DatabaseHelper bd = new DatabaseHelper(getContext());
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user!= null){
+            notifications = bd.ShowNotification(user.getEmail());
+            adapter = new NotificationAdapter(notifications);
+            rvNotify.setAdapter(adapter);
+        }
+        super.onResume();
+    }
+
     private void initvalues(){
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         rvNotify.setLayoutManager(manager);

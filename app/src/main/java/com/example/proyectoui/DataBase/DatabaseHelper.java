@@ -143,6 +143,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void DeleteNotify( int id){
+        SQLiteDatabase BD = getWritableDatabase();
+        if (BD!=null){
+            BD.execSQL("DELETE FROM NOTIFICATIONS WHERE _id_notification='"+id+"'");
+            BD.close();
+        }
+    }
+
+
+
     public void updatePension(int id ,  String titulo , String desc, Bitmap img , String ubicacion , String telefono ){
         SQLiteDatabase BD = getWritableDatabase();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
