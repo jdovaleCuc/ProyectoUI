@@ -113,4 +113,5 @@
         app:layout_constraintStart_toEndOf="@+id/UpPhoto"
         app:layout_constraintTop_toBottomOf="@+id/nameuser"
         app:srcCompat="@drawable/ic_baseline_camera_alt_24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

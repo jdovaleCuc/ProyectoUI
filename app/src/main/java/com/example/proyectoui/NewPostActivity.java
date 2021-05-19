@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
@@ -97,15 +99,45 @@ public class NewPostActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     BD.AgregarPension(title.getText().toString(),desc.getText().toString(),BYTE,"Malambo","3045933566", user.getEmail());
                     BD.AgregarNotify("Ha Realizado una nueva Publicacion", title.getText().toString(), user.getEmail());
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
+                    progressvar();
                 }
 
             }
         });
     }
+
+    private void progressvar() {
+        ProgressDialog TempDialog;
+        CountDownTimer CDT;
+        final int[] i = {3};
+
+        TempDialog = new ProgressDialog(this);
+        TempDialog.setMessage("Please wait...");
+        TempDialog.setCancelable(false);
+        TempDialog.setProgress(i[0]);
+        TempDialog.show();
+
+        CDT = new CountDownTimer(3000, 1000)
+        {
+            public void onTick(long millisUntilFinished)
+            {
+                TempDialog.setMessage("Espere.." + i[0] + " sec");
+                i[0]--;
+            }
+
+            public void onFinish()
+            {
+                TempDialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                Toast.makeText(NewPostActivity.this, "Se Publico Correctamente", Toast.LENGTH_SHORT).show();
+
+            }
+        }.start();
+
+    }
+
 
     public void tomarFoto(){
         String nombreImagen = "";
