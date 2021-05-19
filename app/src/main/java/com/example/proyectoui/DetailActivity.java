@@ -35,21 +35,28 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.proyectoui.DataBase.DatabaseHelper;
 import com.example.proyectoui.modelo.HousesList;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class DetailActivity extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private ImageView imgDetail, imgPhone, imgEmail;
     private TextView TitleDetail;
     private TextView DescriptionDetail;
     private HousesList houseDetail;
     private MapView mapView;
+    private FusedLocationProviderClient client;
     Toolbar toolbar;
 
     @Override
@@ -60,24 +67,68 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setTitle(getClass().getSimpleName());
         toolbar = findViewById(R.id.Toolbar_detail);
         setSupportActionBar(toolbar);
+
         mapView = findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        //mapView.getMapAsync(this);
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(DetailActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
+        }else {
+            ActivityCompat.requestPermissions(DetailActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+
         imgPhone = findViewById(R.id.phoneView);
         imgEmail = findViewById(R.id.EmailView);
         imgPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowInfo(houseDetail.getTitle(),"Telefono de Contacto: "+houseDetail.getTelefono()); }
+                ShowInfo(houseDetail.getTitle(), "Telefono de Contacto: " + houseDetail.getTelefono());
+            }
         });
         imgEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowInfo(houseDetail.getTitle(),"Email de Contacto: "+houseDetail.getIdUser());
+                ShowInfo(houseDetail.getTitle(), "Email de Contacto: " + houseDetail.getIdUser());
             }
         });
         initViews();
         initValues();
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null){
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                            MarkerOptions options = new MarkerOptions().position(latLng).title("Estoy Aqui");
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                            googleMap.addMarker(options);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 44){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            }
+        }
     }
 
     @Override
@@ -145,15 +196,16 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
 
-    public void onMapReady(GoogleMap map) {
+  /*  public void onMapReady(GoogleMap map) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
            return;
         }
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Marker"));
-    }
+        Location  location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
+        map.addMarker(new MarkerOptions().position(pos).title("Marker"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+    }*/
 
     @Override
     protected void onPause() {

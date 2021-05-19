@@ -36,4 +36,5 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="updatePoststring">Actualizar</string>
+    <string name="Sign_OUT">Cerrar Sesion</string>
 </resources>

@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USER = "create table " + TABLE_USER + "(" + _ID_USER
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + USERNAME + " TEXT NOT NULL, " + LASTNAME + " TEXT, "+
-            UNIVERSIDAD + " TEXT , " + EMAIL + " TEXT NOT NULL);";
+            UNIVERSIDAD + " TEXT , " + EMAIL + " TEXT NOT NULL UNIQUE);";
 
     private static final String CREATE_TABLE_NOTIFY = "create table " + TABLE_NOTIFY + "(" + _ID_NOTIFY
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TOPIC + " TEXT NOT NULL, " + DESC_NOT + " TEXT, "+
@@ -153,13 +153,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public void updatePension(int id ,  String titulo , String desc, Bitmap img , String ubicacion , String telefono ){
+    public void updatePension(int id ,  String titulo , String desc , String ubicacion , String telefono ){
         SQLiteDatabase BD = getWritableDatabase();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.PNG, 100 , byteArrayOutputStream);
-        byte[] ByteImg = byteArrayOutputStream.toByteArray();
         if (BD!=null){
-            BD.execSQL("UPDATE PENSION SET titulo='"+titulo+"',description='"+desc+"',ubicacionTEXT='"+ubicacion+"',imagen='"+ByteImg+"',telefono='"+telefono+"' WHERE _id='"+id+"'");
+            BD.execSQL("UPDATE PENSION SET titulo='"+titulo+"',description='"+desc+"',ubicacion='"+ubicacion+"',telefono='"+telefono+"' WHERE _id='"+id+"'");
             BD.close();
         }
     }

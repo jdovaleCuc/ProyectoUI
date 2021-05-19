@@ -39,7 +39,6 @@ public class NewPostActivity extends AppCompatActivity {
     private ImageButton btntomarfoto,btnsubirfoto;
     private ImageView img;
     private FirebaseAuth mAuth;
-   // byte[] ByteImg;
 
 
     Uri imagenUri;

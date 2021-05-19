@@ -2,6 +2,7 @@ package com.example.proyectoui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.SQLException;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.proyectoui.DataBase.DatabaseHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -106,13 +108,14 @@ public class AccountFragment extends Fragment {
         TextView title = view.findViewById(R.id.Title_Card_Session);
         TextView userv =  view.findViewById(R.id.User_Text);
         SignInButton google = view.findViewById(R.id.googleSignIn);
-        ImageButton Out = view.findViewById(R.id.SignOut);
+        Button Out = view.findViewById(R.id.SignOut);
         ImageView imguser = view.findViewById(R.id.UserImg);
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null){
             title.setText("Bienvenido");
             userv.setText(user.getDisplayName());
             Glide.with(getContext()).load(user.getPhotoUrl()).into(imguser);
+            google.setVisibility(google.INVISIBLE);
 
         }else {
             Out.setVisibility(Out.INVISIBLE);
@@ -139,7 +142,6 @@ public class AccountFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -147,6 +149,8 @@ public class AccountFragment extends Fragment {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
+
+
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -156,13 +160,19 @@ public class AccountFragment extends Fragment {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        final DatabaseHelper BD = new DatabaseHelper(getContext());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            try {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                BD.AgregarUser(user.getDisplayName(),"","CUC",user.getEmail());
+                            }catch (SQLException e){
+                                Log.d(TAG, "Error Exception :"+e);
+                            }
                             Log.d(TAG, "signInWithCredential:success");
-
                         } else {
                             // If sign in fails, display a message to the user.
                            Log.w(TAG, "signInWithCredential:failure", task.getException());

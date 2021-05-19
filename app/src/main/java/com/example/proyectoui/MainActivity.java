@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,NewPostActivity.class);
             startActivity(intent);
         }else{
-            Toast.makeText(this, "Inicie Sesion Para Publicar", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this,LoginActivity.class);
-            startActivity(intent);
+            AccountFragment accountFragment = new AccountFragment();
+            SetFragment(accountFragment);
+            Toast.makeText(this, "Inicie sesion con su cuenta de GOOGLE", Toast.LENGTH_SHORT).show();
         }
 
     }
