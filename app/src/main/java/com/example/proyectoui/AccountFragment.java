@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -129,7 +130,8 @@ public class AccountFragment extends Fragment {
         Out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.getInstance().signOut();
+                //mAuth.getInstance().signOut();
+                mGoogleSignInClient.signOut();
                 Intent intent = new Intent(getContext(),MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getContext(), "Sesion Cerrada", Toast.LENGTH_SHORT).show();
@@ -185,4 +187,5 @@ public class AccountFragment extends Fragment {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
 }
